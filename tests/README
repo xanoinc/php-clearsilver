@@ -1,0 +1,24 @@
+TESTS
+
+These tests are run when 'make test' is executed after having done a
+'make' of the PHP source tree.
+
+01.phpt: hdf_init - Initialise an HDF data set.
+02.phpt: hdf_read_file - Read an HDF data file.
+03.phpt: hdf_write_file - Write an HDF data set to disk.
+04.phpt: hdf_write_string - Serialise an HDF dataset to a string.
+05.phpt: hdf_set_value - Set the value of a named node.
+06.phpt: hdf_get_value - Return the value of a node in the data set.
+07.phpt: hdf_get_node - Return the HDF data set node at a named location, creating it if it does not exist.
+08.phpt: hdf_get_obj - Return the HDF data set node at a named location.
+09.phpt: hdf_obj_name - Return the name of a node.
+10.phpt: hdf_obj_value - Return the value of a node.
+11.phpt: hdf_obj_child - Return the first child of a dataset node.
+12.phpt: hdf_obj_next - Return the next node of a dataset level.
+13.phpt: hdf_get_child - Return the first child of a named node.
+14.phpt: hdf_destroy - Deallocate an HDF data set.
+15.phpt: cs_init - Create and initialise a CS context.
+16.phpt: cs_parse_string - Parse a CS template string.
+17.phpt: cs_parse_file - Parse a CS template file.
+18.phpt: cs_render - Render a CS parse tree to a string.
+19.phpt: cs_destroy - Clean up and deallocate a CS parse tree.

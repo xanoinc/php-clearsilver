@@ -1,0 +1,57 @@
+Install PHP ClearSilver
+
+The following steps will enable PHP with support for Clearsilver. Use
+the first procedure unless you want the extension installed as a
+built-in module. Both procedures require that Clearsilver is
+installed[1] and that you have downloaded the PHP Clearsilver
+distribution.
+
+N.B. This extension has been developed on Linux; there is no support
+yet for any other system.
+
+In the following procedures PHP_CLEARSILVER refers to the version of
+PHP Clearsilver that you are using
+(e.g. PHP_CLEARSILVER=php-clearsilver-0.1).
+
+
+Procedure 1. Installation as external (shared) module
+
+1. Ensure PHP is installed. The PHP header files must also be
+   available[2].
+2. Run tar -xzvf ${PHP_CLEARSILVER}.tar.gz to extract the downloaded
+   archive.
+3. cd ${PHP_CLEARSILVER} to enter the extracted directory.
+4. Run ./configure --with-clearsilver[3].
+5. Run make to build the Clearsilver extension.
+6. Run make install to install the resulting clearsilver.so file in
+   your PHP extensions directory.
+   
+
+Procedure 2. Installation as built-in module
+
+1. Ensure you have a clean PHP source (>= 4.3.0) available. PHP is
+   available at http://www.php.net/downloads.php.
+2. Move the downloaded ${PHP_CLEARSILVER}.tar.gz archive to the root
+   directory of the PHP source tree.
+3. cd to the root of the PHP source tree.
+4. Run tar -xzvf ${PHP_CLEARSILVER}.tar.gz to extract the archive.
+5. mv ${PHP_CLEARSILVER} ext/clearsilver
+6. Run ./buildconf --force to make the PHP build system aware of the
+   Clearsilver extension.
+7. Run ./configure --with-clearsilver[3]. If you use
+   --with-clearsilver=shared you will build the extension as a shared
+   module.
+8. Run make to build PHP with Clearsilver support.
+9. Optionally run make test to perform tests which ensure that
+   Clearsilver is working properly.
+10. Run make install to install PHP on the system.
+
+Once installed you can view the output of the phpinfo function to check that PHP Clearsilver is available. 
+
+[1] Clearsilver is available at http://www.clearsilver.net/downloads/.
+[2] Depending on your system, header files may be distributed
+separately in a development package.
+[3] If Clearsilver is installed in a non default location (e.g. the
+--prefix option was passed to the Clearsilver configure) or configure
+complains that Clearsilver cannot be found then pass the Clearsilver
+installation path as the argument to --with-clearsilver.

@@ -1,0 +1,1097 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<reference id="pecl.cs">
+  <referenceinfo>
+	<date>$Date: 2004-11-02 17:07:02 +0000 (Tue, 02 Nov 2004) $</date>
+	<author>
+	  <honorific>Mr</honorific>
+	  <firstname>Homme</firstname>
+	  <surname>Zwaagstra</surname>
+	  <affiliation>
+		<orgname>GeoData Institute</orgname>
+		<address>
+		  University of Southampton
+		  <city>Southampton</city>
+		  <state>Hampshire</state>
+		  <postcode>SO17 1BJ</postcode>
+		  <country>UK</country>
+		  <phone>tel: +44 (0)23 8059 2719</phone>
+		  <fax>fax: +44 (0)23 8059 2849</fax>
+		  <email>geodata@soton.ac.uk</email>
+		</address>
+	  </affiliation>
+	</author>
+	<copyright>
+	  <year>2004</year>
+	  <holder><ulink url="http://www.geodata.soton.ac.uk">GeoData Institute</ulink><inlinegraphic fileref="images/geodata_icon.png"/></holder>
+	</copyright>
+  </referenceinfo>
+  <title>ClearSilver PHP Extension</title>
+  <!--<titleabbrev>cs</titleabbrev>
+	  This is included in PHP documentation but isn't understood by the DocBook XSL stylesheet (v 1.66.1)
+  -->
+  <partintro>
+	<sect1 id="pecl.cs.partintro">
+	  <title>Introduction</title>
+	  
+	  <sect2 id="pecl.cs.intro">
+		<title>About PHP Clearsilver</title>
+		<warning>
+		  <para>
+			This software is experimental; <abbrev>i.e.</abbrev> it is newly written and has
+			not been fully tested. Use at your own risk! Neither the
+			author nor his employers can be held responsible for any
+			damages resulting from its use.
+		  </para>
+		</warning>
+		<note>
+		  <para>
+			The latest version of this document can be found at <ulink
+			url="http://www.geodata.soton.ac.uk/software/php_clearsilver/">http://www.geodata.soton.ac.uk/software/php_clearsilver/</ulink>.
+		  </para>
+		</note>
+		<para>
+		  <ulink url="http://www.clearsilver.net">Clearsilver</ulink>
+		  is a fast, powerful, and language-neutral template
+		  system. It is designed to make it easy to create template
+		  driven websites. This extension provides a procedural <ulink
+		  url="http://www.php.net">PHP</ulink> interface to
+		  Clearsilver.
+		</para>
+		<para>
+		  The general idea is that PHP is used to create a
+		  Hierarchical Data Format (<acronym>HDF</acronym>). The
+		  <acronym>HDF</acronym> represents the dynamic output of a
+		  PHP script. The <acronym>HDF</acronym> is then combined with
+		  static output in the form of a Clearsilver template to
+		  produce the final output. The template is composed of text
+		  (usually, but not limited to, <acronym>HTML</acronym>)
+		  interspersed with Clearsilver tags.
+		</para>
+		<para>
+		  A useful page providing an overview of the Clearsilver
+		  software architecture can be found at <ulink
+		  url="http://www.clearsilver.net/docs/template_basics.hdf">http://www.clearsilver.net/docs/template_basics.hdf</ulink>.
+		</para>
+		<para>
+		  Most PHP interaction with Clearsilver involves the creation
+		  of the <acronym>HDF</acronym>.  This can be populated
+		  dynamically, read from disk, <abbrev>etc.</abbrev> Many
+		  scripts do not output
+		  <emphasis>anything</emphasis><footnote><para>Except
+		  <acronym>HTTP</acronym> headers produced by the
+		  <function>header</function> function.</para></footnote> to
+		  the browser directly, save the output produced through
+		  feeding the resulting <acronym>HDF</acronym> to the
+		  template. However, the flexible design of Clearsilver,
+		  specifically its ability to easily work with templates
+		  stored as strings, means that this purist approach is not
+		  the only use for the technology. For instance, PHP objects
+		  which render to strings (<abbrev>e.g.</abbrev> implementing
+		  PHP5's <function>__toString</function> method) can
+		  internally create an <acronym>HDF</acronym> representing
+		  their current state. Their output can then be tailored by
+		  rendering this data with alternative templates. This
+		  provides an elegant solution to those seeking to create
+		  applications based on the Model View Controller
+		  (<acronym>MVC</acronym>) paradigm.
+		</para>
+	  </sect2>
+	  
+	  <sect2 id="pecl.cs.contact">
+		<title>Contact</title>
+		<para>
+		  If you have comments, enhancements, bugs or you would like
+		  to help develop the extension please email <ulink
+		  url="mailto:geodata@soton.ac.uk">geodata@soton.ac.uk</ulink>.
+		</para>
+	  </sect2>
+	  <sect2 id="pecl.cs.acknowledgements">
+		<title>Acknowledgements</title>
+		<para>
+		  Thanks go to the <ulink url="http://www.neotonic.com/">Neotonic Software Corporation</ulink> for providing ClearSilver.
+		</para>
+	  </sect2>
+	  <sect2 id="pecl.cs.download">
+		<title>Download</title>
+		<para>
+		  The latest version can downloaded from <ulink
+		  url="http://www.geodata.soton.ac.uk/software/php_clearsilver/downloads.php">http://www.geodata.soton.ac.uk/software/php_clearsilver/downloads.php</ulink>.
+		</para>
+	  </sect2>
+	  <sect2 id="pecl.cs.install">
+		<title>Install</title>
+		<simpara>
+		  The following steps will enable PHP with support for
+		  Clearsilver. Use the first procedure unless you want the
+		  extension installed as a built-in module. Both procedures
+		  require that Clearsilver is
+		  installed<footnote><simpara>Clearsilver is available at
+		  <ulink
+		  url="http://www.clearsilver.net/downloads/">http://www.clearsilver.net/downloads/</ulink>.</simpara></footnote>
+		  and that you have downloaded the PHP Clearsilver
+		  distribution.
+		</simpara>
+		<note>
+		  <para>This extension has been developed on Linux; there is no support yet for any other system.</para>
+		</note>
+		<simpara>
+		  In the following
+		  procedures <envar>PHP_CLEARSILVER</envar> refers to the
+		  version of PHP Clearsilver that you are using
+		  (<abbrev>e.g.</abbrev> <command>PHP_CLEARSILVER=php-clearsilver-0.1</command>).
+		</simpara>
+
+		<procedure>
+		  <title>Installation as external (shared) module</title>
+		  <step>
+			<simpara>Ensure PHP is installed. The PHP header files must also be available<footnote><simpara>Depending on your system, header files may be distributed separately in a development package.</simpara></footnote>.</simpara>
+		  </step>
+		  <step>
+			<simpara>Run <command>tar -xzvf ${PHP_CLEARSILVER}.tar.gz</command> to extract the downloaded archive.</simpara>
+		  </step>
+		  <step>
+			<simpara><command>cd ${PHP_CLEARSILVER}</command> to enter the extracted directory.</simpara>
+		  </step>
+		  <step>
+			<para>Run <command>./configure --with-clearsilver</command><footnote id="fn.config"><simpara>If Clearsilver is installed in a non default location (<abbrev>e.g.</abbrev> the <option>--prefix</option> option was passed to the Clearsilver <command>configure</command>) or <command>configure</command> complains that Clearsilver cannot be found then pass the Clearsilver installation path as the argument to <option>--with-clearsilver</option>.</simpara></footnote>.</para>
+		  </step>
+		  <step>
+			<simpara>Run <command>make</command> to build the Clearsilver extension.</simpara>
+		  </step>
+		  <step>
+			<simpara>Run <command>make install</command> to install the resulting <filename class="libraryfile">clearsilver.so</filename> file in your PHP extensions directory.</simpara>
+		  </step>
+		</procedure>
+
+		<procedure>
+		  <title>Installation as built-in module</title>
+		  <step>
+			<simpara>Ensure you have a clean PHP source (>= 4.3.0) available. PHP is available at <ulink url="http://www.php.net/downloads.php">http://www.php.net/downloads.php</ulink>.</simpara>
+		  </step>
+		  <step>
+			<simpara>Move the downloaded <filename>${PHP_CLEARSILVER}.tar.gz</filename> archive to the root directory of the PHP source tree.</simpara>
+		  </step>
+		  <step>
+			<simpara><command>cd</command> to the root of the PHP source tree.</simpara>
+		  </step>
+		  <step>
+			<simpara>Run <command>tar -xzvf ${PHP_CLEARSILVER}.tar.gz</command> to extract the archive.</simpara>
+		  </step>
+		  <step>
+			<simpara><command>mv ${PHP_CLEARSILVER} ext/clearsilver</command></simpara>
+		  </step>
+		  <step>
+			<simpara>Run <command>./buildconf --force</command> to make the PHP build system aware of the Clearsilver extension.</simpara>
+		  </step>
+		  <step>
+			<para>Run <command>./configure --with-clearsilver</command><footnoteref linkend="fn.config"/>. If you use <option>--with-clearsilver=shared</option> you will build the extension as a shared module.</para>
+		  </step>
+		  <step>
+			<simpara>Run <command>make</command> to build PHP with Clearsilver support.</simpara>
+		  </step>
+		  <step performance="optional">
+			<simpara>Optionally run <command>make test</command> to perform tests which ensure that Clearsilver is working properly.</simpara>
+		  </step>
+		  <step>
+			<simpara>Run <command>make install</command> to install PHP on the system.</simpara>
+		  </step>
+		</procedure>
+
+		<para>
+		  Once installed you can view the output of the <function>phpinfo</function> function to check that PHP Clearsilver is available.
+		</para>
+	  </sect2>
+
+	  <sect2 id="pecl.cs.usage">
+		<title>How to use PHP Clearsilver</title>
+		<para>
+		  Ensure the extension is loaded, either by altering your PHP
+		  INI file or by calling the <function>dl</function> function
+		  at the beginning of your script. Then work along the
+		  following lines:
+		  <example>
+			<title>Clearsilver extension overview example</title>
+			<programlisting role="php">
+<![CDATA[<?php
+
+// initialise the Hierarchical Data Format (HDF)
+$hdf = hdf_init();
+
+// populate HDF
+hdf_set_value($hdf, 'person.name.fore', 'Joseph');
+hdf_set_value($hdf, 'person.name.middle', 'Frank');
+hdf_set_value($hdf, 'person.name.nick', 'Buster');
+hdf_set_value($hdf, 'person.name.sur', 'Keaton');
+hdf_set_value($hdf, 'person.profession', 'Comedian');
+hdf_set_value($hdf, 'person.age', 71);
+hdf_set_value($hdf, 'person.alive', false);
+
+// initialise a Clearsilver parse tree (CS) with the HDF
+$cs = cs_init($hdf);
+
+// create template (from a string in this case) 
+$template = '<p>
+  <b><?cs var person.name.fore ?> 
+  "<i><?cs var person.name.nick ?></i>" 
+  <?cs var person.name.sur ?></b>, the greatest
+  <?cs var person.profession ?> of them all, 
+  <?cs if:person.alive ?> 
+    is <?cs var person.age ?> years old
+  <?cs else ?>
+    died at the age of <?cs var person.age ?>
+  <?cs /if ?>.
+</p>';
+
+// parse the template
+cs_parse_string($cs, $template);
+
+// render the template
+print cs_render($cs);
+
+// destroy the resources
+hdf_destroy($hdf);
+cs_destroy($cs);
+
+?>]]>
+			</programlisting>
+			<para>
+			  The above example will output:
+			</para>
+			<screen>
+			  <![CDATA[
+<p>
+  <b>Joseph 
+  "<i>Buster</i>" 
+  Keaton</b>, the greatest
+  Comedian of them all, 
+  
+    died at the age of 71
+  .
+</p>
+
+			  ]]>
+			</screen>
+		  </example>
+		</para>
+		<note>
+		  <para>
+			Documentation of Clearsilver template syntax can be found at
+			<ulink
+			url="http://www.clearsilver.net/docs/man_templates.hdf">http://www.clearsilver.net/docs/man_templates.hdf</ulink>. Note
+			that some useful template functions are not documented but
+			can be found in the test examples in the Clearsilver
+			distribution (<abbrev>e.g.</abbrev> <function>subcount</function>).
+		  </para>
+		</note>
+		<para>
+		  The <acronym>HDF</acronym> is described in detail at <ulink
+		  url="http://www.clearsilver.net/docs/man_hdf.hdf">http://www.clearsilver.net/docs/man_hdf.hdf</ulink>,
+		  but it is useful to note that it can be derived directly
+		  from PHP's <type>array</type> type (see <xref
+		  linkend="pecl.cs.hdf_set_value"/> and
+		  <xref linkend="pecl.cs.hdf_obj_next"/>). Effectively an HDF's
+		  node name corresponds to an <type>array</type>'s key. Unlike
+		  <type>array</type>s, however, an HDF node can have child
+		  nodes <emphasis>as well as</emphasis> a value; in a
+		  multi-dimensional <type>array</type> a key's value is
+		  <emphasis>either</emphasis> a primitive type (or object)
+		  <emphasis>or</emphasis> an <type>array</type>. A PHP
+		  implementation of this mapping follows:
+		</para>
+		<para>
+		  <example>
+			<title>Mapping a PHP array to an <acronym>HDF</acronym></title>
+			<programlisting role="php">
+			  <![CDATA[
+<?php
+// iterate over an array, mapping it to an HDF
+function array2hdf(&$array, $hdf, $node_name = null) {
+  foreach ($array as $key => $value) {
+    if ($node_name !== null) {
+      $key = sprintf("%s.%s", $node_name, $key);
+    }
+
+    if (!is_array($value)) {
+      hdf_set_value($hdf, $key, $value);
+    } else {
+      array2hdf($value, $hdf, $key);
+    }
+  }
+}
+
+$arr = array('Name' => 'My Index',
+             'URL' => '/myindex.html',
+             'Menu' => array('Home',
+                             'Preferences',
+                             'Help',
+                             'Support'));
+
+$hdf = hdf_init();
+
+// copy the array to the HDF
+array2hdf($arr, $hdf, 'Page');
+
+print hdf_write_string($hdf);
+?>
+			  ]]>
+			</programlisting>
+			<para>
+			  The HDF output by the above example is:
+			</para>
+			<screen>
+			  <![CDATA[
+Page {
+Name = My Index
+URL = /myindex.html
+Menu {
+0 = Home
+1 = Preferences
+2 = Help
+3 = Support
+}
+}
+			  ]]>
+			</screen>
+		  </example>
+		  <tip>
+			<simpara>
+			  This can be accomplished more efficiently by passing an
+			  array as the value to
+			  <xref linkend="pecl.cs.hdf_set_value"/>.
+			</simpara>
+		  </tip>
+		</para>
+	  </sect2>
+	</sect1>
+  </partintro>
+
+  <refentry id="pecl.cs.hdf_init">
+	<refnamediv>
+	  <refname>hdf_init</refname>
+	  <refpurpose>Initialise an <acronym>HDF</acronym> data set.</refpurpose>
+	</refnamediv>
+	<refsect1>
+	  <title>Description</title>
+	  <funcsynopsis>
+		<funcprototype>
+		  <funcdef>resource <function>hdf_init</function></funcdef>
+		  <void/>
+		</funcprototype>
+	  </funcsynopsis>
+	  <para>
+		Returns an <acronym>HDF</acronym> resource.
+	  </para>
+	  <para>
+		<example>
+		  <title><function>hdf_init</function> example</title>
+		  <programlisting role="php">
+			<![CDATA[
+<?php
+print_r(hdf_init());
+?>
+			]]>
+		  </programlisting>
+		</example>
+	  </para>
+	</refsect1>
+  </refentry>
+
+  <refentry id="pecl.cs.hdf_read_file">
+	<refnamediv>
+	  <refname>hdf_read_file</refname>
+	  <refpurpose>Read an <acronym>HDF</acronym> data file.</refpurpose>
+	</refnamediv>
+	<refsect1>
+	  <title>Description</title>
+	  <funcsynopsis>
+		<funcprototype>
+		  <funcdef>bool <function>hdf_read_file</function></funcdef>
+		  <paramdef>resource <parameter>hdf</parameter></paramdef>
+		  <paramdef>string <parameter>path</parameter></paramdef>
+		</funcprototype>
+	  </funcsynopsis>
+	  <para>
+		Populates the <acronym>HDF</acronym> resource <parameter>hdf</parameter> from the file <parameter>path</parameter>. Returns <returnvalue>true</returnvalue> on success, <returnvalue>false</returnvalue> on failure.
+	  </para>
+	  <para>
+		<example>
+		  <title><function>hdf_read_file</function> example</title>
+		  <programlisting role="php">
+			<![CDATA[
+<?php
+$hdf = hdf_init();
+hdf_read_file($hdf, '/path/to/data.hdf');
+print_r($hdf);
+?>
+			]]>
+		  </programlisting>
+		</example>
+	  </para>
+	</refsect1>
+  </refentry>
+
+  <refentry id="pecl.cs.hdf_write_file">
+	<refnamediv>
+	  <refname>hdf_write_file</refname>
+	  <refpurpose>Write an <acronym>HDF</acronym> data set to disk.</refpurpose>
+	</refnamediv>
+	<refsect1>
+	  <title>Description</title>
+	  <funcsynopsis>
+		<funcprototype>
+		  <funcdef>bool <function>hdf_write_file</function></funcdef>
+		  <paramdef>resource <parameter>hdf</parameter></paramdef>
+		  <paramdef>string <parameter>path</parameter></paramdef>
+		</funcprototype>
+	  </funcsynopsis>
+	  <para>
+		Saves the <acronym>HDF</acronym> resource <parameter>hdf</parameter> to the file <parameter>path</parameter>. Returns <returnvalue>true</returnvalue> on success, <returnvalue>false</returnvalue> on failure.
+	  </para>
+	  <para>
+		<example>
+		  <title><function>hdf_write_file</function> example</title>
+		  <programlisting role="php">
+			<![CDATA[
+<?php
+$hdf = hdf_init();
+hdf_set_value($hdf, 'data.node', 'my value');
+hdf_write_file($hdf, '/path/to/data.hdf');
+?>
+			]]>
+		  </programlisting>
+		</example>
+	  </para>
+	</refsect1>
+  </refentry>
+
+  <refentry id="pecl.cs.hdf_write_string">
+	<refnamediv>
+	  <refname>hdf_write_string</refname>
+	  <refpurpose>Serialise an <acronym>HDF</acronym> dataset to a string.</refpurpose>
+	</refnamediv>
+	<refsect1>
+	  <title>Description</title>
+	  <funcsynopsis>
+		<funcprototype>
+		  <funcdef>string <function>hdf_write_string</function></funcdef>
+		  <paramdef>resource <parameter>hdf</parameter></paramdef>
+		</funcprototype>
+	  </funcsynopsis>
+	  <para>
+		Returns a string representation of the <acronym>HDF</acronym> resource <parameter>hdf</parameter>.
+	  </para>
+	  <para>
+		<example>
+		  <title><function>hdf_write_string</function> example</title>
+		  <programlisting role="php">
+			<![CDATA[
+<?php
+$hdf = hdf_init();
+hdf_set_value($hdf, 'data.node', 'my value');
+print hdf_write_string($hdf);
+?>
+			]]>
+		  </programlisting>
+		</example>
+	  </para>
+	</refsect1>
+  </refentry>
+  
+  <refentry id="pecl.cs.hdf_set_value">
+	<refnamediv>
+	  <refname>hdf_set_value</refname>
+	  <refpurpose>Set the value of a named node.</refpurpose>
+	</refnamediv>
+	<refsect1>
+	  <title>Description</title>
+	  <funcsynopsis>
+		<funcprototype>
+		  <funcdef>bool <function>hdf_set_value</function></funcdef>
+		  <paramdef>resource <parameter>hdf</parameter></paramdef>
+		  <paramdef>string <parameter>name</parameter></paramdef>
+		  <paramdef>mixed <parameter>value</parameter></paramdef>
+		</funcprototype>
+	  </funcsynopsis>
+	  <para>
+		Sets the <parameter>value</parameter> of node <parameter>name</parameter> in <acronym>HDF</acronym> resource <parameter>hdf</parameter>. Returns <returnvalue>true</returnvalue> on success, <returnvalue>false</returnvalue> on failure. <parameter>value</parameter> can be an <type>array</type> in which case key => value pairs are mapped to node_name => value. This also works for multi-dimensional <type>array</type>s.
+	  </para>
+	  <note>
+		<para>
+		  The <parameter>value</parameter> gets converted to a string in the <acronym>HDF</acronym>.
+		</para>
+	  </note>
+	  <para>
+		<example>
+		  <title><function>hdf_set_value</function> example</title>
+		  <programlisting role="php">
+			<![CDATA[
+<?php
+$hdf = hdf_init();
+hdf_set_value($hdf, 'data.node', 'my value');
+print hdf_get_value($hdf, 'data.node', 'default value');
+?>
+			]]>
+		  </programlisting>
+		</example>
+	  </para>
+	</refsect1>
+  </refentry>
+
+  <refentry id="pecl.cs.hdf_get_value">
+	<refnamediv>
+	  <refname>hdf_get_value</refname>
+	  <refpurpose>Return the value of a node in the data set.</refpurpose>
+	</refnamediv>
+	<refsect1>
+	  <title>Description</title>
+	  <funcsynopsis>
+		<funcprototype>
+		  <funcdef>string <function>hdf_get_value</function></funcdef>
+		  <paramdef>resource <parameter>hdf</parameter></paramdef>
+		  <paramdef>string <parameter>name</parameter></paramdef>
+		  <paramdef>string <parameter>defval</parameter></paramdef>
+		</funcprototype>
+	  </funcsynopsis>
+	  <para>
+		Returns the value of node <parameter>name</parameter> in <acronym>HDF</acronym> resource <parameter>hdf</parameter>, or <parameter>defval</parameter> if <parameter>name</parameter> does not exist.
+	  </para>
+	  <para>
+		<example>
+		  <title><function>hdf_get_value</function> example</title>
+		  <programlisting role="php">
+			<![CDATA[
+<?php
+$hdf = hdf_init();
+hdf_set_value($hdf, 'data.node', 'my value');
+print hdf_get_value($hdf, 'data.node', 'default value');
+?>
+			]]>
+		  </programlisting>
+		</example>
+	  </para>
+	</refsect1>
+  </refentry>
+
+  <refentry id="pecl.cs.hdf_get_node">
+	<refnamediv>
+	  <refname>hdf_get_node</refname>
+	  <refpurpose>Return the <acronym>HDF</acronym> data set node at a named location, creating it if it does not exist.</refpurpose>
+	</refnamediv>
+	<refsect1>
+	  <title>Description</title>
+	  <funcsynopsis>
+		<funcprototype>
+		  <funcdef>resource <function>hdf_get_node</function></funcdef>
+		  <paramdef>resource <parameter>hdf</parameter></paramdef>
+		  <paramdef>string <parameter>name</parameter></paramdef>
+		</funcprototype>
+	  </funcsynopsis>
+	  <para>
+		Returns an <acronym>HDF</acronym> resource representing node <parameter>name</parameter> in the parent <acronym>HDF</acronym> resource <parameter>hdf</parameter>.
+	  </para>
+	  <note>
+		<para>
+		  This is similar to <xref linkend="pecl.cs.hdf_get_obj"/> except that it creates the node <parameter>name</parameter> if it does not exist.
+		</para>
+	  </note>
+	  <para>
+		<example>
+		  <title><function>hdf_get_node</function> example</title>
+		  <programlisting role="php">
+			<![CDATA[
+<?php
+$hdf = hdf_init();
+print_r(hdf_get_node($hdf, 'data.node'));
+?>
+			]]>
+		  </programlisting>
+		</example>
+	  </para>
+	</refsect1>
+  </refentry>
+
+  <refentry id="pecl.cs.hdf_get_obj">
+	<refnamediv>
+	  <refname>hdf_get_obj</refname>
+	  <refpurpose>Return the <acronym>HDF</acronym> data set node at a named location.</refpurpose>
+	</refnamediv>
+	<refsect1>
+	  <title>Description</title>
+	  <funcsynopsis>
+		<funcprototype>
+		  <funcdef>resource <function>hdf_get_obj</function></funcdef>
+		  <paramdef>resource <parameter>hdf</parameter></paramdef>
+		  <paramdef>string <parameter>name</parameter></paramdef>
+		</funcprototype>
+	  </funcsynopsis>
+	  <para>
+		Returns an <acronym>HDF</acronym> resource representing node <parameter>name</parameter> in the parent <acronym>HDF</acronym> resource <parameter>hdf</parameter>, or <returnvalue>null</returnvalue> if <parameter>name</parameter> does not exist.
+	  </para>
+	  <note>
+		<para>
+		  This is similar to <xref linkend="pecl.cs.hdf_get_node"/> except that if the node <parameter>name</parameter> does not exist it is not automatically created.
+		</para>
+	  </note>
+	  <para>
+		<example>
+		  <title><function>hdf_get_obj</function> example</title>
+		  <programlisting role="php">
+			<![CDATA[
+<?php
+$hdf = hdf_init();
+print_r(hdf_get_obj($hdf, 'data.node'));
+?>
+			]]>
+		  </programlisting>
+		</example>
+	  </para>
+	</refsect1>
+  </refentry>
+
+  <refentry id="pecl.cs.hdf_obj_name">
+	<refnamediv>
+	  <refname>hdf_obj_name</refname>
+	  <refpurpose>Return the name of a node.</refpurpose>
+	</refnamediv>
+	<refsect1>
+	  <title>Description</title>
+	  <funcsynopsis>
+		<funcprototype>
+		  <funcdef>string <function>hdf_obj_name</function></funcdef>
+		  <paramdef>resource <parameter>hdf</parameter></paramdef>
+		</funcprototype>
+	  </funcsynopsis>
+	  <para>
+		Returns the node name of an <acronym>HDF</acronym> resource <parameter>hdf</parameter>.
+	  </para>
+	  <para>
+		<example>
+		  <title><function>hdf_obj_name</function> example</title>
+		  <programlisting role="php">
+			<![CDATA[
+<?php
+$hdf = hdf_init();
+$node = hdf_get_node($hdf, 'data.node');
+print hdf_obj_name($node); // outputs 'node'
+?>
+			]]>
+		  </programlisting>
+		</example>
+	  </para>
+	</refsect1>
+  </refentry>
+
+  <refentry id="pecl.cs.hdf_obj_value">
+	<refnamediv>
+	  <refname>hdf_obj_value</refname>
+	  <refpurpose>Return the value of a node.</refpurpose>
+	</refnamediv>
+	<refsect1>
+	  <title>Description</title>
+	  <funcsynopsis>
+		<funcprototype>
+		  <funcdef>string <function>hdf_obj_value</function></funcdef>
+		  <paramdef>resource <parameter>hdf</parameter></paramdef>
+		</funcprototype>
+	  </funcsynopsis>
+	  <para>
+		Returns the value of an <acronym>HDF</acronym> resource <parameter>hdf</parameter>.
+	  </para>
+	  <para>
+		<example>
+		  <title><function>hdf_obj_value</function> example</title>
+		  <programlisting role="php">
+			<![CDATA[
+<?php
+$hdf = hdf_init();
+hdf_set_value($hdf, '', 'my value');
+print hdf_obj_value($hdf); // outputs 'my value'
+?>
+			]]>
+		  </programlisting>
+		</example>
+	  </para>
+	</refsect1>
+  </refentry>
+
+  <refentry id="pecl.cs.hdf_obj_child">
+	<refnamediv>
+	  <refname>hdf_obj_child</refname>
+	  <refpurpose>Return the first child of a dataset node.</refpurpose>
+	</refnamediv>
+	<refsect1>
+	  <title>Description</title>
+	  <funcsynopsis>
+		<funcprototype>
+		  <funcdef>resource <function>hdf_obj_child</function></funcdef>
+		  <paramdef>resource <parameter>hdf</parameter></paramdef>
+		</funcprototype>
+	  </funcsynopsis>
+	  <para>
+		Returns the first child node of an <acronym>HDF</acronym> resource <parameter>hdf</parameter>, or <returnvalue>null</returnvalue> if no children exist.
+	  </para>
+	  <para>
+		<example>
+		  <title><function>hdf_obj_child</function> example</title>
+		  <programlisting role="php">
+			<![CDATA[
+<?php
+$hdf = hdf_init();
+hdf_set_value($hdf, 'foo', 'bar');
+print_r(hdf_obj_child($hdf));
+?>
+			]]>
+		  </programlisting>
+		</example>
+	  </para>
+	</refsect1>
+  </refentry>
+
+  <refentry id="pecl.cs.hdf_obj_next">
+	<refnamediv>
+	  <refname>hdf_obj_next</refname>
+	  <refpurpose>Return the next node of a dataset level.</refpurpose>
+	</refnamediv>
+	<refsect1>
+	  <title>Description</title>
+	  <funcsynopsis>
+		<funcprototype>
+		  <funcdef>resource <function>hdf_obj_next</function></funcdef>
+		  <paramdef>resource <parameter>hdf</parameter></paramdef>
+		</funcprototype>
+	  </funcsynopsis>
+	  <para>
+		Returns the next node of an <acronym>HDF</acronym> resource <parameter>hdf</parameter>, or <returnvalue>null</returnvalue> if no more children exist.
+	  </para>
+	  <para>
+		<example>
+		  <title><function>hdf_obj_next</function> example</title>
+		  <programlisting role="php">
+			<![CDATA[
+<?php
+// recursively walk an HDF node, printing the contents
+function tree_walk($node) 
+{
+  while ($node) {
+    printf("%s => %s<br/>\n", hdf_obj_name($node), hdf_obj_value($node));
+    tree_walk(hdf_obj_child($node));
+
+    // get the next child node
+    $node = hdf_obj_next($node);
+  }
+}
+
+$hdf = hdf_init();
+
+$arr = array('foo' => 'bar',
+             1 => array('key' => 'value'));
+
+// map the array to the HDF
+hdf_set_value($hdf, '', $arr);
+
+// iterate over the HDF
+tree_walk($hdf);
+?>
+			]]>
+		  </programlisting>
+		  <para>
+			The above example will output:
+		  </para>
+		  <screen>
+			<![CDATA[
+ => <br/>
+foo => bar<br/>
+1 => <br/>
+key => value<br/>
+			]]>
+		  </screen>
+		</example>
+	  </para>
+	</refsect1>
+  </refentry>
+
+  <refentry id="pecl.cs.hdf_get_child">
+	<refnamediv>
+	  <refname>hdf_get_child</refname>
+	  <refpurpose>Return the first child of a named node.</refpurpose>
+	</refnamediv>
+	<refsect1>
+	  <title>Description</title>
+	  <funcsynopsis>
+		<funcprototype>
+		  <funcdef>resource <function>hdf_get_child</function></funcdef>
+		  <paramdef>resource <parameter>hdf</parameter></paramdef>
+		  <paramdef>string <parameter>name</parameter></paramdef>
+		</funcprototype>
+	  </funcsynopsis>
+	  <para>
+		Returns the first child of the named node <parameter>name</parameter> of an <acronym>HDF</acronym> resource <parameter>hdf</parameter>, or <returnvalue>null</returnvalue> if <parameter>name</parameter> does not exist.
+	  </para>
+	  <para>
+		<example>
+		  <title><function>hdf_get_child</function> example</title>
+		  <programlisting role="php">
+			<![CDATA[
+<?php
+$hdf = hdf_init();
+hdf_set_value($hdf, 'parentNode.childNode', 'child value');
+print_r(hdf_get_child($hdf, 'parentNode'));
+?>
+			]]>
+		  </programlisting>
+		</example>
+	  </para>
+	</refsect1>
+  </refentry>
+
+  <refentry id="pecl.cs.hdf_destroy">
+	<refnamediv>
+	  <refname>hdf_destroy</refname>
+	  <refpurpose>Deallocate an <acronym>HDF</acronym> data set.</refpurpose>
+	</refnamediv>
+	<refsect1>
+	  <title>Description</title>
+	  <funcsynopsis>
+		<funcprototype>
+		  <funcdef>void <function>hdf_destroy</function></funcdef>
+		  <paramdef>resource <parameter>hdf</parameter></paramdef>
+		</funcprototype>
+	  </funcsynopsis>
+	  <para>
+		Frees memory resources associated with the <acronym>HDF</acronym> resource <parameter>hdf</parameter>.
+	  </para>
+	  <note>
+		<para>
+		  The variable representing <parameter>hdf</parameter> must not be used in any more operations after having passed it to this function!
+		</para>
+	  </note>
+	  <para>
+		<example>
+		  <title><function>hdf_destroy</function> example</title>
+		  <programlisting role="php">
+			<![CDATA[
+<?php
+$hdf = hdf_init();
+hdf_destroy($hdf);
+?>
+			]]>
+		  </programlisting>
+		</example>
+	  </para>
+	</refsect1>
+  </refentry>
+
+  <refentry id="pecl.cs.cs_init">
+	<refnamediv>
+	  <refname>cs_init</refname>
+	  <refpurpose>Create and initialise a <acronym>CS</acronym> context.</refpurpose>
+	</refnamediv>
+	<refsect1>
+	  <title>Description</title>
+	  <funcsynopsis>
+		<funcprototype>
+		  <funcdef>resource <function>cs_init</function></funcdef>
+		  <paramdef>resource <parameter>hdf</parameter></paramdef>
+		</funcprototype>
+	  </funcsynopsis>
+	  <para>
+		Returns a <acronym>CS</acronym> resource, or
+		<returnvalue>null</returnvalue> if the resource could not be
+		created. The <acronym>CS</acronym> context must be initialised
+		with an <acronym>HDF</acronym> containing the data to be
+		rendered in the template.
+	  </para>
+	  <para>
+		<example>
+		  <title><function>cs_init</function> example</title>
+		  <programlisting role="php">
+			<![CDATA[
+<?php
+$hdf = hdf_init();
+hdf_set_value($hdf, 'foo', 'bar');
+print_r(cs_init($hdf));
+?>
+			]]>
+		  </programlisting>
+		</example>
+	  </para>
+	</refsect1>
+  </refentry>
+
+  <refentry id="pecl.cs.cs_parse_string">
+	<refnamediv>
+	  <refname>cs_parse_string</refname>
+	  <refpurpose>Parse a <acronym>CS</acronym> template string.</refpurpose>
+	</refnamediv>
+	<refsect1>
+	  <title>Description</title>
+	  <funcsynopsis>
+		<funcprototype>
+		  <funcdef>bool <function>cs_parse_string</function></funcdef>
+		  <paramdef>resource <parameter>cs</parameter></paramdef>
+		  <paramdef>string <parameter>template</parameter></paramdef>
+		</funcprototype>
+	  </funcsynopsis>
+	  <para>
+		Parses a template string <parameter>template</parameter>, adding it to the <acronym>CS</acronym> context <parameter>cs</parameter>. Returns <returnvalue>true</returnvalue> on successful parsing, <returnvalue>false</returnvalue> otherwise.
+	  </para>
+	  <para>
+		<example>
+		  <title><function>cs_parse_string</function> example</title>
+		  <programlisting role="php">
+			<![CDATA[
+<?php
+$hdf = hdf_init();
+hdf_set_value($hdf, 'message', 'Hello World!');
+$cs = cs_init($hdf);
+
+$template = 'Your message is "<?cs var message ?>".';
+if (!cs_parse_string($cs, $template)) {
+  die('Failed to parse template');
+}
+?>
+			]]>
+		  </programlisting>
+		</example>
+	  </para>
+	</refsect1>
+  </refentry>
+
+  <refentry id="pecl.cs.cs_parse_file">
+	<refnamediv>
+	  <refname>cs_parse_file</refname>
+	  <refpurpose>Parse a <acronym>CS</acronym> template file.</refpurpose>
+	</refnamediv>
+	<refsect1>
+	  <title>Description</title>
+	  <funcsynopsis>
+		<funcprototype>
+		  <funcdef>bool <function>cs_parse_file</function></funcdef>
+		  <paramdef>resource <parameter>cs</parameter></paramdef>
+		  <paramdef>string <parameter>path</parameter></paramdef>
+		</funcprototype>
+	  </funcsynopsis>
+	  <para>
+		Parses a template file <parameter>path</parameter>, adding it to the <acronym>CS</acronym> context <parameter>cs</parameter>. Returns <returnvalue>true</returnvalue> on successful parsing, <returnvalue>false</returnvalue> otherwise.
+	  </para>
+	  <para>
+		<example>
+		  <title><function>cs_parse_file</function> example</title>
+		  <programlisting role="php">
+			<![CDATA[
+<?php
+$hdf = hdf_init();
+hdf_set_value($hdf, 'message', 'Hello World!');
+$cs = cs_init($hdf);
+
+if (!cs_parse_file($cs, '/path/to/template.cs')) {
+  die('Failed to parse template');
+}
+?>
+			]]>
+		  </programlisting>
+		</example>
+	  </para>
+	</refsect1>
+  </refentry>
+
+  <refentry id="pecl.cs.cs_render">
+	<refnamediv>
+	  <refname>cs_render</refname>
+	  <refpurpose>Render a <acronym>CS</acronym> parse tree to a string.</refpurpose>
+	</refnamediv>
+	<refsect1>
+	  <title>Description</title>
+	  <funcsynopsis>
+		<funcprototype>
+		  <funcdef>string <function>cs_render</function></funcdef>
+		  <paramdef>resource <parameter>cs</parameter></paramdef>
+		</funcprototype>
+	  </funcsynopsis>
+	  <para>
+		Returns the rendered parse tree represented by <parameter>cs</parameter>, or <returnvalue>null</returnvalue> if the render fails.
+	  </para>
+	  <para>
+		<example>
+		  <title><function>cs_render</function> example</title>
+		  <programlisting role="php">
+			<![CDATA[
+<?php
+$hdf = hdf_init();
+hdf_set_value($hdf, 'message', 'Hello World!');
+$cs = cs_init($hdf);
+
+$template = 'Your message is "<?cs var message ?>".';
+if (!cs_parse_string($cs, $template)) {
+  die('Failed to parse template');
+}
+
+print cs_render($cs);
+?>
+			]]>
+		  </programlisting>
+		</example>
+	  </para>
+	</refsect1>
+  </refentry>
+
+  <refentry id="pecl.cs.cs_destroy">
+	<refnamediv>
+	  <refname>cs_destroy</refname>
+	  <refpurpose>Clean up and deallocate a <acronym>CS</acronym> parse tree.</refpurpose>
+	</refnamediv>
+	<refsect1>
+	  <title>Description</title>
+	  <funcsynopsis>
+		<funcprototype>
+		  <funcdef>void <function>cs_destroy</function></funcdef>
+		  <paramdef>resource <parameter>cs</parameter></paramdef>
+		</funcprototype>
+	  </funcsynopsis>
+	  <para>
+		Frees memory resources associated with the <acronym>CS</acronym> resource <parameter>cs</parameter>.
+	  </para>
+	  <note>
+		<para>
+		  The variable representing <parameter>cs</parameter> must not be used in any more operations after having passed it to this function!
+		</para>
+	  </note>
+	  <para>
+		<example>
+		  <title><function>cs_destroy</function> example</title>
+		  <programlisting role="php">
+			<![CDATA[
+<?php
+$hdf = hdf_init();
+$cs = cs_init($hdf);
+
+hdf_destroy($hdf);
+cs_destroy($cs);
+?>
+			]]>
+		  </programlisting>
+		</example>
+	  </para>
+	</refsect1>
+  </refentry>
+  
+</reference>
+<!-- Keep this comment at the end of the file
+	 Local variables:
+	 mode: sgml
+	 sgml-omittag:t
+	 sgml-shorttag:t
+	 sgml-minimize-attributes:nil
+	 sgml-always-quote-attributes:t
+	 sgml-indent-step:1
+	 sgml-indent-data:t
+	 sgml-parent-document:nil
+	 sgml-default-dtd-file:"../../manual.ced"
+	 sgml-exposed-tags:nil
+	 sgml-local-catalogs:nil
+	 sgml-local-ecat-files:nil
+	 End:
+	 vim600: syn=xml fen fdm=syntax fdl=2 si
+	 vim: et tw=78 syn=sgml
+	 vi: ts=1 sw=1
+-->

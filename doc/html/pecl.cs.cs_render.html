@@ -1,0 +1,21 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>cs_render</title><link rel="stylesheet" href="docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.66.1"><link rel="start" href="index.html" title="ClearSilver PHP Extension"><link rel="up" href="index.html" title="ClearSilver PHP Extension"><link rel="prev" href="pecl.cs.cs_parse_file.html" title="cs_parse_file"><link rel="next" href="pecl.cs.cs_destroy.html" title="cs_destroy"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">cs_render</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="pecl.cs.cs_parse_file.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="pecl.cs.cs_destroy.html">Next</a></td></tr></table><hr></div><div class="refentry" lang="en"><a name="pecl.cs.cs_render"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>cs_render &#8212; Render a <span class="acronym">CS</span> parse tree to a string.</p></div><div class="refsect1" lang="en"><a name="id2850119"></a><h2>Description</h2><div class="funcsynopsis"><p><code class="funcdef">string <b class="fsfunc">cs_render</b>(</code><var class="pdparam">cs</var><code>)</code>;<br>resource <code>cs</code>;</p></div><p>
+		Returns the rendered parse tree represented by <i class="parameter"><tt>cs</tt></i>, or <span class="returnvalue">null</span> if the render fails.
+	  </p><p>
+		</p><div class="example"><a name="id2850166"></a><p class="title"><b>Example 20. <tt class="function">cs_render</tt> example</b></p><pre class="programlisting">
+			
+&lt;?php
+$hdf = hdf_init();
+hdf_set_value($hdf, 'message', 'Hello World!');
+$cs = cs_init($hdf);
+
+$template = 'Your message is &quot;&lt;?cs var message ?&gt;&quot;.';
+if (!cs_parse_string($cs, $template)) {
+  die('Failed to parse template');
+}
+
+print cs_render($cs);
+?&gt;
+			
+		  </pre></div><p>
+	  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="pecl.cs.cs_parse_file.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="index.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="pecl.cs.cs_destroy.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">cs_parse_file </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> cs_destroy</td></tr></table></div></body></html>

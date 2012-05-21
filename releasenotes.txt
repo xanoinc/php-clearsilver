@@ -1,0 +1,7 @@
+Version 0.3
+Author: Sean Montgomery
+
+- registered clearsilver filters in cs_init (this is for html_escape, js_escape, etc)
+  this required adding a dependency of neo_cgi to the make file
+- replaced hdf_set_value with an unreleased version from 0.2, which uses php itself to print the mixed variable
+- added clearsilver extension version to phpinfo output
