@@ -90,7 +90,7 @@ char * neo_error_to_string (NEOERR *err)
  *
  * Every user visible function must have an entry in clearsilver_functions[].
  */
-function_entry clearsilver_functions[] = {
+zend_function_entry clearsilver_functions[] = {
 	PHP_FE(hdf_init,	NULL)
 	PHP_FE(hdf_read_file,	NULL)
 	PHP_FE(hdf_write_file,	NULL)
@@ -456,14 +456,14 @@ PHP_FUNCTION(hdf_set_value)
 	}
 
 	/* start buffering */
-	php_start_ob_buffer (NULL, 0, 1 TSRMLS_CC);
+	php_output_start_default(TSRMLS_C);
 
 	/* print zval */
 	zend_print_variable(value);
 
 	/* retrieve output buffer */
-	php_ob_get_buffer (return_value TSRMLS_CC);
-	php_end_ob_buffer (0, 0 TSRMLS_CC);
+	php_output_get_contents(return_value TSRMLS_CC);
+	php_output_discard(TSRMLS_C);
 	
 	err = hdf_set_value(hdf, name, Z_STRVAL_P(return_value));
 	if (err != STATUS_OK) {
